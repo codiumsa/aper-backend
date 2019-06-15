@@ -25,6 +25,19 @@ Be sure to set the following parameters in the file you just created:
 - GOOGLE_CLIENT_ID: what you just got from google
 - SQLALCHEMY_DATABASE_URI: URI to your database
 
+Install pipenv by following this tuto: https://pypi.org/project/pipenv/
+
+Create database with sqlite command:
+```
+$ sqlite3 test.db
+>> .databases
+```
+.databases should list the existing databases like this: 
+``
+main: /home/raspberry/porton/test.db
+``
+
+
 Having done that, we can install the app:
 
 ```
