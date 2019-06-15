@@ -31,7 +31,6 @@ Having done that, we can install the app:
 pipenv install
 pipenv shell
 export FLASK_APP=aper
-flask db init
 flask db upgrade
 python run.py
 ```
