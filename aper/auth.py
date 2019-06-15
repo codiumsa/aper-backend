@@ -28,10 +28,10 @@ def load_user(request):
 
     try:
         # Specify the CLIENT_ID of the app that accesses the backend:
-        #idinfo = id_token.verify_oauth2_token(token, requests.Request(),
-        #                                      app.config['GOOGLE_CLIENT_ID'])
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(),
+                                              app.config['GOOGLE_CLIENT_ID'])
 
-        idinfo = json.loads(dummy_info)
+        #idinfo = json.loads(dummy_info)
 
         # Or, if multiple clients access the backend server:
         # idinfo = id_token.verify_oauth2_token(token, requests.Request())
