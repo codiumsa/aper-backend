@@ -4,6 +4,8 @@ from flask import jsonify, request
 from .models import User
 from .db import db_session
 import datetime
+from gpiozero import LED
+from time import sleep
 
 
 @app.route('/')
@@ -24,6 +26,11 @@ def users():
 def open_gate():
     allowed_users = User.allowed_users()
     if current_user in allowed_users:
+        controller=LED(17)
+        controller.on()
+        sleep(2)
+        controller.off()
+        sleep(2)
         return 'Open Sesame'
     else:
         return 'You cannot park inside today', 403
