@@ -47,3 +47,15 @@ export FLASK_APP=aper
 flask db upgrade
 python run.py
 ```
+
+## Alternative to pyenv
+
+```
+python3 -m venv .py3venv
+source .py3venv/bin/activate
+pip install wheel
+pip install flask flask-login google-auth flask-sqlalchemy requests flask-migrate rpi-gpio
+export FLASK_APP=aper
+flask db upgrade
+python run.py
+```
