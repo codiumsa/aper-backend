@@ -32,10 +32,20 @@ def open_gate():
 @app.route('/users', methods=['PUT'])
 @login_required
 def update_user():
+    print(current_user)
     current_user.order = request.form.get('order', current_user.order)
-
     d = request.form.get('absent_on', current_user.absent_on)
     if d:
         current_user.absent_on = datetime.datetime.strptime(d, '%Y-%m-%d')
     db_session.commit()
     return 'User updated'
+
+@app.route('/users', methods=['POST'])
+@login_required
+def update_users():
+    arr = request.form.get('ids').split(',')
+    for id, index in enumerate(arr, start = 1):
+        user = User.query.get(id)
+        user.order = index
+    db_session.commit()
+    return 'Users updated'
