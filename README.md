@@ -37,7 +37,6 @@ $ sqlite3 test.db
 main: /home/raspberry/porton/test.db
 ``
 
-
 Having done that, we can install the app:
 
 ```
@@ -47,3 +46,8 @@ export FLASK_APP=aper
 flask db upgrade
 python run.py
 ```
+
+## RaspberryPI connection
+Pin 1 —> +3V -> Rele DC+
+Pin 9 —> GND -> Rele DC-
+Pin 11 —> GPIO 17 -> Rele IN
