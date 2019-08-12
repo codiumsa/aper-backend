@@ -28,10 +28,10 @@ def load_user(request):
 
     try:
         # Specify the CLIENT_ID of the app that accesses the backend:
-        #idinfo = id_token.verify_oauth2_token(token, requests.Request(),
-        #                                      app.config['GOOGLE_CLIENT_ID'])
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(),
+                                             app.config['GOOGLE_CLIENT_ID'])
 
-        idinfo = json.loads(dummy_info)
+        # idinfo = json.loads(dummy_info)
 
         # Or, if multiple clients access the backend server:
         # idinfo = id_token.verify_oauth2_token(token, requests.Request())
@@ -48,11 +48,14 @@ def load_user(request):
         #     raise ValueError('Wrong hosted domain.')
 
         # ID token is valid. Get the user's Google Account ID from the decoded token.
+        # print(idinfo)
         user = User.query.filter(User.email == idinfo['email']).first()
         if not user:
-            user = User(idinfo['name'], idinfo['email'])
+            user = User(idinfo['name'], idinfo['email'], idinfo['picture'])
             db_session.add(user)
-            db_session.commit()
+        else:
+            user.avatar = idinfo['picture']
+        db_session.commit()
         return user
     except ValueError:
         # Invalid token
