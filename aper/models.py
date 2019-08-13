@@ -15,13 +15,15 @@ class User(UserMixin, Base):
     name = Column(String(100))
     order = Column(Integer, nullable=False)
     absent_on = Column(Date)
+    avatar = Column(String(100))
 
-    def __init__(self, name, email):
+    def __init__(self, name, email, avatar):
         self.email = email
         self.name = name
         max_order = db_session.query(func.max(User.order)).scalar()
         self.order = max_order + 1 if max_order else 1
         self.absent_on = None
+        self.avatar = avatar
 
     def serialize(self):
         """Return object data in serializeable format"""
@@ -30,7 +32,8 @@ class User(UserMixin, Base):
             'name': self.name,
             'email': self.email,
             'order': self.order,
-            'absent_on': self.absent_on
+            'absent_on': self.absent_on,
+            'avatar': self.avatar
         }
 
     @classmethod
@@ -44,4 +47,4 @@ class User(UserMixin, Base):
         return '<User {}[{}]>'.format(self.name, self.email)
 
     def __eq__(self, value):
-        return self.id == value.id and self.name == value.name and self.order == value.order and self.absent_on == value.absent_on
+        return self.id == value.id and self.name == value.name and self.order == value.order and self.absent_on == value.absent_on and self.avatar == value.avatar

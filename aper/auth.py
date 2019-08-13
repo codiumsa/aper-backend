@@ -48,11 +48,14 @@ def load_user(request):
         #     raise ValueError('Wrong hosted domain.')
 
         # ID token is valid. Get the user's Google Account ID from the decoded token.
+        # print(idinfo)
         user = User.query.filter(User.email == idinfo['email']).first()
         if not user:
-            user = User(idinfo['name'], idinfo['email'])
+            user = User(idinfo['name'], idinfo['email'], idinfo['picture'])
             db_session.add(user)
-            db_session.commit()
+        else:
+            user.avatar = idinfo['picture']
+        db_session.commit()
         return user
     except ValueError:
         # Invalid token
