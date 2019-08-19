@@ -8,10 +8,10 @@ from gpiozero import LED
 from time import sleep
 
 
-@app.route('/')
+@app.route('/current_user', methods=['GET'])
 @login_required
-def index():
-    return 'Hello {}!'.format(current_user.name)
+def get_current_user():
+    return jsonify(current_user.serialize())
 
 
 @app.route('/users', methods=['GET'])
@@ -38,11 +38,11 @@ def open_gate():
 
 @app.route('/not_using', methods=['POST'])
 @login_required
-def update_user():
+def not_using():
     print(current_user)
     current_user.absent_on = date.today()
     db_session.commit()
-    return 'OK'
+    return 'Registramos que no vas a usar tu lugar hoy'
 
 
 @app.route('/users', methods=['POST'])
