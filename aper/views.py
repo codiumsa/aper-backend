@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from flask import jsonify, request
 from .models import User
 from .db import db_session
-import datetime
+from datetime import date
 from gpiozero import LED
 from time import sleep
 
@@ -26,26 +26,24 @@ def users():
 def open_gate():
     allowed_users = User.allowed_users()
     if current_user in allowed_users:
-        controller=LED(17)
-        controller.on()
-        sleep(2)
-        controller.off()
-        sleep(2)
-        return 'Open Sesame'
+        # controller=LED(17)
+        # controller.on()
+        # sleep(2)
+        # controller.off()
+        # sleep(2)
+        return 'Abriendo portón...'
     else:
-        return 'You cannot park inside today', 403
+        return 'No podés estacionar adentro hoy :(', 403
 
 
-@app.route('/users', methods=['PUT'])
+@app.route('/not_using', methods=['POST'])
 @login_required
 def update_user():
     print(current_user)
-    current_user.order = request.form.get('order', current_user.order)
-    d = request.form.get('absent_on', current_user.absent_on)
-    if d:
-        current_user.absent_on = datetime.datetime.strptime(d, '%Y-%m-%d')
+    current_user.absent_on = date.today()
     db_session.commit()
-    return 'User updated'
+    return 'OK'
+
 
 @app.route('/users', methods=['POST'])
 @login_required

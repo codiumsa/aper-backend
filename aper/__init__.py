@@ -22,6 +22,5 @@ migrate = Migrate(app, Base)
 def shutdown_session(exception=None):
     db_session.remove()
 
-
 import aper.auth
 import aper.views

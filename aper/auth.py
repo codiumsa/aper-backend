@@ -3,7 +3,7 @@ from .models import User
 from .db import db_session
 from google.oauth2 import id_token
 from google.auth.transport import requests
-import json
+
 
 
 @login_manager.request_loader
@@ -28,6 +28,7 @@ def load_user(request):
 
     try:
         # Specify the CLIENT_ID of the app that accesses the backend:
+
         idinfo = id_token.verify_oauth2_token(token, requests.Request(),
                                               app.config['GOOGLE_CLIENT_ID'])
 
@@ -37,19 +38,20 @@ def load_user(request):
         # idinfo = id_token.verify_oauth2_token(token, requests.Request())
         # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
         #     raise ValueError('Could not verify audience.')
-
         if idinfo['iss'] not in [
                 'accounts.google.com', 'https://accounts.google.com'
         ]:
             raise ValueError('Wrong issuer.')
-
         # If auth request is from a G Suite domain:
         # if idinfo['hd'] != GSUITE_DOMAIN_NAME:
         #     raise ValueError('Wrong hosted domain.')
 
         # ID token is valid. Get the user's Google Account ID from the decoded token.
-        # print(idinfo)
+
         user = User.query.filter(User.email == idinfo['email']).first()
+
+        print(user)
+
         if not user:
             user = User(idinfo['name'], idinfo['email'], idinfo['picture'])
             db_session.add(user)
