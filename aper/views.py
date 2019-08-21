@@ -4,6 +4,7 @@ from flask import jsonify, request
 from .models import User
 from .db import db_session
 from datetime import date
+import datetime
 from gpiozero import LED
 from time import sleep
 
@@ -40,10 +41,14 @@ def open_gate():
 @login_required
 def not_using():
     print(current_user)
-    current_user.absent_on = date.today()
-    db_session.commit()
-    return 'Registramos que no vas a usar tu lugar hoy'
-
+    if current_user.absent_on != datetime.date.today():
+        current_user.absent_on = date.today()
+        db_session.commit()
+        return 'Registramos que no vas a usar tu lugar hoy'
+    else:
+        current_user.absent_on = None
+        db_session.commit()
+        return 'Vas a usar tu lugar hoy'
 
 @app.route('/users', methods=['POST'])
 @login_required
