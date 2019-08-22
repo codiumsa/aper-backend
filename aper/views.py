@@ -50,6 +50,7 @@ def not_using():
         db_session.commit()
         return 'Vas a usar tu lugar hoy'
 
+
 @app.route('/users', methods=['POST'])
 @login_required
 def update_users():
@@ -59,3 +60,12 @@ def update_users():
         user.order = index
     db_session.commit()
     return 'Users updated'
+
+
+@app.route('/absent', methods=['GET'])
+@login_required
+def isabsent():
+    if current_user.absent_on == datetime.date.today():
+        return 'yes'
+    else:
+        return 'no'
