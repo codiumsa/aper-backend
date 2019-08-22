@@ -18,14 +18,14 @@ class User(UserMixin, Base):
     avatar = Column(String(100))
     role = Column(String(100))
 
-    def __init__(self, name, email, avatar):
+    def __init__(self, name, email, avatar, role):
         self.email = email
         self.name = name
         max_order = db_session.query(func.max(User.order)).scalar()
         self.order = max_order + 1 if max_order else 1
         self.absent_on = None
         self.avatar = avatar
-        self.role = None
+        self.role = role
 
     def serialize(self):
         """Return object data in serializeable format"""

@@ -65,7 +65,7 @@ def load_user(request):
         user = User.query.filter(User.email == idinfo['email']).first()
 
         if not user:
-            user = User(idinfo['name'], idinfo['email'], idinfo['picture'])
+            user = User(idinfo['name'], idinfo['email'], idinfo['picture'], "GUEST")
             db_session.add(user)
         else:
             user.avatar = idinfo['picture']
