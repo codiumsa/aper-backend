@@ -48,9 +48,21 @@ def load_user(request):
 
         # ID token is valid. Get the user's Google Account ID from the decoded token.
 
-        user = User.query.filter(User.email == idinfo['email']).first()
+    #     whitelist = app.config['USERS']
+    #
+    #     if idinfo['email'] in whitelist:
+    #         user = User.query.filter(User.email == idinfo['email']).first()
+    #         if not user:
+    #             newuser = User(idinfo['name'], idinfo['email'], idinfo['picture'])
+    #             db_session.add(newuser)
+    #         else:
+    #             return user
+    #     else:
+    #         return None
+    # except ValueError:
+    #     return None
 
-        print(user)
+        user = User.query.filter(User.email == idinfo['email']).first()
 
         if not user:
             user = User(idinfo['name'], idinfo['email'], idinfo['picture'])

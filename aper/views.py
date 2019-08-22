@@ -18,49 +18,74 @@ def get_current_user():
 @app.route('/users', methods=['GET'])
 @login_required
 def users():
-    users = [u.serialize() for u in User.query.all()]
-    return jsonify(users)
+    if current_user.role != 'ADMIN':
+        return 'UNAUTHORIZED', 401
+    else:
+        users = [u.serialize() for u in User.query.all()]
+        return jsonify(users)
 
 
 @app.route('/open_gate', methods=['GET'])
 @login_required
 def open_gate():
-    allowed_users = User.allowed_users()
-    if current_user in allowed_users:
-        # controller=LED(17)
-        # controller.on()
-        # sleep(2)
-        # controller.off()
-        # sleep(2)
-        return 'Abriendo portón...'
+    if (current_user.role != 'ADMIN' and current_user.role != 'USER'):
+        return 'UNAUTHORIZED', 401
     else:
-        return 'No podés estacionar adentro hoy :(', 403
+        allowed_users = User.allowed_users()
+        if current_user in allowed_users:
+            # controller=LED(17)
+            # controller.on()
+            # sleep(2)
+            # controller.off()
+            # sleep(2)
+            return 'Abriendo portón...'
+        else:
+            return 'No podés estacionar adentro hoy :(', 403
 
 
 @app.route('/not_using', methods=['POST'])
 @login_required
 def not_using():
-    print(current_user)
-    if current_user.absent_on != datetime.date.today():
-        current_user.absent_on = date.today()
-        db_session.commit()
-        return 'Registramos que no vas a usar tu lugar hoy'
+    if (current_user.role != 'ADMIN' and current_user.role != 'USER'):
+        return 'UNAUTHORIZED', 401
     else:
-        current_user.absent_on = None
-        db_session.commit()
-        return 'Vas a usar tu lugar hoy'
+        print(current_user)
+        if current_user.absent_on != datetime.date.today():
+            current_user.absent_on = date.today()
+            db_session.commit()
+            return 'Registramos que no vas a usar tu lugar hoy'
+        else:
+            current_user.absent_on = None
+            db_session.commit()
+            return 'Vas a usar tu lugar hoy'
 
 
-@app.route('/users', methods=['POST'])
+@app.route('/users_order', methods=['POST'])
 @login_required
-def update_users():
-    arr = request.form.get('ids').split(',')
-    for id, index in enumerate(arr, start = 1):
-        user = User.query.get(id)
-        user.order = index
-    db_session.commit()
-    return 'Users updated'
+def change_order():
+    if current_user.role != 'ADMIN':
+        return 'UNAUTHORIZED', 401
+    else:
+        arr = request.form.get('ids').split(',')
+        for id, index in enumerate(arr, start = 1):
+            user = User.query.get(id)
+            user.order = index
+        db_session.commit()
+        return 'Users updated'
 
+@app.route('/users_roles', methods=['POST'])
+@login_required
+def change_roles():
+    if current_user.role != 'ADMIN':
+        return 'UNAUTHORIZED', 401
+    else:
+        arr = request.form.get('ids').split(',')
+        print(arr)
+        for id, index in enumerate(arr, start = 1):
+            user = User.query.get(id)
+            user.role = index
+        db_session.commit()
+        return 'Users updated'
 
 @app.route('/absent', methods=['GET'])
 @login_required
