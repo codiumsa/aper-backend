@@ -62,9 +62,15 @@ def load_user(request):
     # except ValueError:
     #     return None
 
+        users = User.query.filter().all()
         user = User.query.filter(User.email == idinfo['email']).first()
 
         if not user:
+            if not users:
+                admin = User(idinfo['name'], idinfo['email'], idinfo['picture'], "ADMIN")
+                db_session.add(admin);
+                db_session.commit()
+                return admin
             user = User(idinfo['name'], idinfo['email'], idinfo['picture'], "GUEST")
             db_session.add(user)
         else:

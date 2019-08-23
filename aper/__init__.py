@@ -17,7 +17,6 @@ from flask_migrate import Migrate
 
 migrate = Migrate(app, Base)
 
-
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
