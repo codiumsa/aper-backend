@@ -33,11 +33,11 @@ def open_gate():
     else:
         allowed_users = User.allowed_users()
         if current_user in allowed_users:
-            # controller=LED(17)
-            # controller.on()
-            # sleep(2)
-            # controller.off()
-            # sleep(2)
+            controller=LED(17)
+            controller.on()
+            sleep(2)
+            controller.off()
+            sleep(2)
             return 'Abriendo portón...'
         else:
             return 'No podés estacionar adentro hoy :(', 403
