@@ -17,6 +17,7 @@ class User(UserMixin, Base):
     absent_on = Column(Date)
     avatar = Column(String(100))
     role = Column(String(100))
+    last_use = Column(Date)
 
     def __init__(self, name, email, avatar, role):
         self.email = email
@@ -26,6 +27,7 @@ class User(UserMixin, Base):
         self.absent_on = None
         self.avatar = avatar
         self.role = role
+        self.last_use = None
 
     def serialize(self):
         """Return object data in serializeable format"""
@@ -37,6 +39,7 @@ class User(UserMixin, Base):
             'absent_on': self.absent_on,
             'avatar': self.avatar,
             'role': self.role,
+            'last_use': self.last_use
         }
 
     @classmethod
@@ -50,4 +53,4 @@ class User(UserMixin, Base):
         return '<User {}[{}]>'.format(self.name, self.email)
 
     def __eq__(self, value):
-        return self.id == value.id and self.name == value.name and self.order == value.order and self.absent_on == value.absent_on and self.avatar == value.avatar and self.role == value.role
+        return self.id == value.id and self.name == value.name and self.order == value.order and self.absent_on == value.absent_on and self.avatar == value.avatar and self.role == value.role and self.last_use == value.last_use
