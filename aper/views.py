@@ -53,11 +53,11 @@ def not_using():
         if current_user.absent_on != datetime.date.today():
             current_user.absent_on = date.today()
             db_session.commit()
-            return 'Registramos que no vas a usar tu lugar hoy'
+            return 'Registramos que no vas a usar tu lugar hoy', 201
         else:
             current_user.absent_on = None
             db_session.commit()
-            return 'Vas a usar tu lugar hoy'
+            return 'Vas a usar tu lugar hoy', 202
 
 
 @app.route('/users_order', methods=['POST'])
