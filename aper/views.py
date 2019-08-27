@@ -33,7 +33,7 @@ def open_gate():
     else:
         allowed_users = User.allowed_users()
         if current_user in allowed_users:
-            controller=LED(17)
+            controller = LED(17)
             controller.on()
             sleep(2)
             controller.off()
@@ -98,5 +98,5 @@ def isabsent():
 @app.route('/last_use', methods=['GET'])
 @login_required
 def getlastuse():
-    user = User.query.order_by('last_use').first()
+    user = User.query.order_by(User.last_use.desc()).first()
     return user.serialize()
