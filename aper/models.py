@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 from flask import current_app
-from sqlalchemy import Column, Integer, String, Date, or_
+from sqlalchemy import Column, Integer, String, Date, or_, DateTime
 from sqlalchemy.sql.expression import func
 from .db import Base, db_session
 from datetime import date
@@ -17,7 +17,7 @@ class User(UserMixin, Base):
     absent_on = Column(Date)
     avatar = Column(String(100))
     role = Column(String(100))
-    last_use = Column(Date)
+    last_use = Column(DateTime)
 
     def __init__(self, name, email, avatar, role):
         self.email = email

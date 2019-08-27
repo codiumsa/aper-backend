@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from flask import jsonify, request
 from .models import User
 from .db import db_session
-from datetime import date
+from datetime import date, datetime
 import datetime
 from gpiozero import LED
 from time import sleep
@@ -38,6 +38,8 @@ def open_gate():
             sleep(2)
             controller.off()
             sleep(2)
+            current_user.last_use = datetime.datetime.now()
+            db_session.commit()
             return 'Abriendo portón...'
         else:
             return 'No podés estacionar adentro hoy :(', 403
@@ -49,7 +51,6 @@ def not_using():
     if (current_user.role != 'ADMIN' and current_user.role != 'USER'):
         return 'UNAUTHORIZED', 401
     else:
-        print(current_user)
         if current_user.absent_on != datetime.date.today():
             current_user.absent_on = date.today()
             db_session.commit()
@@ -80,7 +81,6 @@ def change_roles():
         return 'UNAUTHORIZED', 401
     else:
         arr = request.form.get('ids').split(',')
-        print(arr)
         for id, index in enumerate(arr, start = 1):
             user = User.query.get(id)
             user.role = index
@@ -94,3 +94,9 @@ def isabsent():
         return 'yes'
     else:
         return 'no'
+
+@app.route('/last_use', methods=['GET'])
+@login_required
+def getlastuse():
+    user = User.query.order_by('last_use').first()
+    return user.serialize()
