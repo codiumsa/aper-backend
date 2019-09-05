@@ -98,6 +98,7 @@ def isabsent():
         else:
             return 'no'
 
+
 @app.route('/last_use', methods=['GET'])
 @login_required
 def getlastuse():
@@ -106,3 +107,19 @@ def getlastuse():
     else:
         user = User.query.order_by(User.last_use.desc()).first()
         return user.serialize()
+
+
+@app.route('/delete', methods=['POST'])
+@login_required
+def delete():
+    if current_user.role != 'ADMIN':
+        return 'FORBIDDEN', 403
+    else:
+        for id, state in request.form.items():
+            if state == 'true':
+                print(id, state)
+                user = User.query.get(id)
+                db_session.delete(user)
+        db_session.commit()
+        return 'ok', 200
+
