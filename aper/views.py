@@ -67,10 +67,12 @@ def change_order():
     if current_user.role != 'ADMIN':
         return 'FORBIDDEN', 403
     else:
-        arr = request.form.get('ids').split(',')
-        for id, index in enumerate(arr, start = 1):
-            user = User.query.get(id)
-            user.order = index
+        for id, order in request.form.items():
+                user = User.query.get(id)
+                if order == 'null':
+                    user.order = ''
+                else:
+                    user.order = order
         db_session.commit()
         return 'Users updated'
 
@@ -80,10 +82,9 @@ def change_roles():
     if current_user.role != 'ADMIN':
         return 'FORBIDDEN', 403
     else:
-        arr = request.form.get('ids').split(',')
-        for id, index in enumerate(arr, start = 1):
-            user = User.query.get(id)
-            user.role = index
+        for id, role in request.form.items():
+                user = User.query.get(id)
+                user.role = role
         db_session.commit()
         return 'Users updated'
 
@@ -117,7 +118,6 @@ def delete():
     else:
         for id, state in request.form.items():
             if state == 'true':
-                print(id, state)
                 user = User.query.get(id)
                 db_session.delete(user)
         db_session.commit()
