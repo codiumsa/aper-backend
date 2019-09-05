@@ -17,3 +17,7 @@ __pycache__/
 
 # Database files
 *.db
+
+certs/*
+uwsgi.log
+requirements.txt
