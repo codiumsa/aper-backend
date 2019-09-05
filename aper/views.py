@@ -35,9 +35,8 @@ def open_gate():
         if current_user in allowed_users:
             controller = LED(17)
             controller.on()
-            sleep(2)
+            sleep(0.5)
             controller.off()
-            sleep(2)
             current_user.last_use = datetime.datetime.now()
             db_session.commit()
             return 'Abriendo portón...'
